@@ -6,7 +6,7 @@ from users.models import User, Role, UserProfile
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -16,8 +16,8 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    role = RoleSerializer()
+    user = UserSerializer(read_only=True)
+    role = serializers.SlugRelatedField(queryset=Role.objects.all(), slug_field='name')
 
     class Meta:
         model = UserProfile
